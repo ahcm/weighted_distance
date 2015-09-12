@@ -1,0 +1,48 @@
+See also:
+http://www.cip.ifi.lmu.de/~hauser/papers/unsupervisedHistIR.pdf
+
+EXAMPLE USAGE
+
+An option overview:
+
+$ ./weighted_distance -help
+Usage: weigthed_distance [options] [<pattern>] [<string> | <filename>]
+Options are:
+  -i   ignore case
+  -d <f>  default costs of float f for -h
+  -n <n>  max substring context
+  -f   search in given file rather than in string
+  -t   search in given file, two strings tab seperated
+  -l   distance / (length(a) + length(b))
+  -h frequency table to read weights from
+  -v   display the characters that need to be changed
+  -m   measure a pattern and a file, two strings tab seperated
+  -help  Display this list of options
+  --help  Display this list of options
+
+
+The historic form "abendt" is compared with the modern form "abend".
+The distance is printed, lower values indicate closer relation.
+
+$ ./weighted_distance -h weight_table abendt abend
+27.111575       abendt  abend
+
+
+To see the lowes cost operations that the algorithm determined add -v:
+
+$ ./weighted_distance -v -h weight_table abendt abend
+ a>a b>b e>e n>n d>d t> |6.275327       abendt  abend
+
+
+Given a file with historic forms and modern forms per line, seperated by tabs,
+the whole file can be processed:
+
+$ ./weighted_distance -h weight_table -t dictionary.tsv.frnhd_lexem.nhd_lexem.iso-8859-1.lc-no-dict
+
+
+Given a modern dictionary (one word per line) get the best modern matches:
+$ ./weighted_distance -h weight_table -i  abendt -f dictionary.tsv.nhd_lexem.iso-8859-1.lc-no-dict | sort -n | head -n 5
+
+
+Cheers
+Andy Hauser <hauser@splashground.de>
